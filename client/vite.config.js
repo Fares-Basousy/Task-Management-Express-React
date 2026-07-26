@@ -6,6 +6,7 @@ export default defineConfig({
     plugins: [react()],
     server: {
         port: 3000,
+        allowedHosts: true,
         proxy: {
             // Forwards /api calls to the Express backend during development.
             '/api': {
