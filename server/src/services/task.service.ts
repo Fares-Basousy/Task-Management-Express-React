@@ -189,10 +189,7 @@ async searchTasks(userId:string, search:string,pageIndex:number,
 
     try{
 
-       const tasks = await Task.find({userId,
-        $or: [
-          { name: { $regex: search, $options: "i" } },
-          { description: { $regex: search, $options: "i" } }]})
+       const tasks = await Task.find({userId,description: { $regex: search, $options: "i" } })
           .skip(pageIndex*10)
           .limit(10)
         return {
