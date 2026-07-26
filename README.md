@@ -86,7 +86,7 @@ The client dev server proxies `/api/*` requests to `http://localhost:4000`, so n
 | Variable | Description |
 |---|---|
 | `VITE_PORT` | The Port which the application run on. |
-| `VITE_server` | Base URL of the API. Leave unset in development to use the Vite proxy at `/api`. |
+| `VITE_SERVER` | Base URL of the API. Leave unset in development to use the Vite proxy at `/api`. |
 
 
 Full details, including defaults and dev-only fields, are in each package's own README.
@@ -128,17 +128,9 @@ Or per package: `npm test --prefix server` / `npm test --prefix client`.
 - [ ] Docker support
 - [ ] Task attachments
 
-## Known issues / incomplete items
-
-- **No deployed version.** The app currently runs locally only.
-- **No Docker support.**
-- **No task attachments.**
-
 ## AI tool usage disclosure
 
 AI tools were used throughout development, per the assessment's stated policy allowing disclosed use of libraries, references, and AI tools:
 
-- **Claude and ChatGPT** were used for the main part of the project — planning, scaffolding, and implementation of features.
+- **Claude chat and ChatGPT chat** were used for the main part of the project — planning, scaffolding, and implementation of features.
 - **Claude Code** was used toward the end of development for bug fixing, data normalization, and writing tests.
-
-All code was reviewed and understood before being committed.
