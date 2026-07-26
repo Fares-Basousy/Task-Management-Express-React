@@ -85,7 +85,9 @@ The client dev server proxies `/api/*` requests to `http://localhost:4000`, so n
 
 | Variable | Description |
 |---|---|
+| `VITE_PORT` | The Port which the application run on. |
 | `VITE_server` | Base URL of the API. Leave unset in development to use the Vite proxy at `/api`. |
+
 
 Full details, including defaults and dev-only fields, are in each package's own README.
 

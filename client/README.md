@@ -40,8 +40,10 @@ Other scripts:
 `.env.example`:
 
 ```env
+# The Port which the application run on. 
+VITE_PORT
 # Base URL for the Express API. Leave unset to use the Vite dev proxy at /api.
-VITE_server=http://localhost:4000
+VITE_SERVER
 ```
 
 In development, `vite.config.ts` proxies any request to `/api/*` through to `http://localhost:4000`, so you generally don't need to set `VITE_server` at all — just make sure the server is running on port 4000. Set it explicitly if you're pointing the client at a deployed API.
