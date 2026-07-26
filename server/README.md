@@ -62,8 +62,6 @@ JWT_SECRET=
 | `MongodbURI` | Yes | MongoDB connection string; the app fails to start if this can't connect |
 | `JWT_SECRET` | Yes | Secret used to sign and verify auth tokens |
 
-No secrets are committed anywhere in the repo; `.env` is git-ignored.
-
 ## Project structure
 
 ```
