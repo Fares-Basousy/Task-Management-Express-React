@@ -179,14 +179,14 @@ describe("TaskService pagination", () => {
     expect(mockedTask.find).toHaveBeenCalledWith({ userId: "user-1", status: 2, priority: 3 });
   });
 
-  it("searchTasks matches on description with a case-insensitive regex", async () => {
+  it("searchTasks matches on title with a case-insensitive regex", async () => {
     mockFindChain([]);
 
     await service.searchTasks("user-1", "groceries", 0);
 
     expect(mockedTask.find).toHaveBeenCalledWith({
       userId: "user-1",
-      description: { $regex: "groceries", $options: "i" },
+      name: { $regex: "groceries", $options: "i" },
     });
   });
 });

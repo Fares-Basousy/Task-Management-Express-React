@@ -1,26 +1,30 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-const port = import.meta.env.VITE_PORT
-const server = import.meta.env.VITE_SERVER
-// https://vitejs.dev/config/
-export default defineConfig({
- plugins: [react()],
+
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return {
+    plugins: [react()],
+
     server: {
-        port: port,
-    	allowedHosts: true, //for ngrok testing
-        proxy: {
-            // Forwards /api calls to the Express backend during development.
-            '/api': {
-                target: server,
-                changeOrigin: true,
-            }
+      port: Number(env.VITE_PORT),
+    allowedHosts: true, //for ngrok testing
+      proxy: {
+        "/api": {
+          target: env.VITE_SERVER,
+          changeOrigin: true,
         },
+      },
     },
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: ['./tests/setup.ts'],
-    css: true,
-  },
+
+    test: {
+      environment: "jsdom",
+      globals: true,
+      setupFiles: ["./tests/setup.ts"],
+      css: true,
+    },
+  };
 });
