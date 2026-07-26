@@ -1,64 +1,96 @@
-# Task Manager — Frontend
+# Task Management Client
 
-React + React Router boilerplate for the task management assignment. Built with Vite and Tailwind CSS.
+React + TypeScript single-page app for the task management assessment. Built with Vite and Tailwind CSS, talking to the Express API in `../server`.
 
-## What's included
+## Tech stack
 
-- **Routing**: `react-router-dom` v6 with a `ProtectedRoute` that redirects to `/login` when there's no valid session.
-- **Auth/session**: `AuthContext` stores the JWT + user in `sessionStorage`, attaches the token to every request via an axios interceptor, and clears the session automatically on a `401` response.
-- **Pages**: `Login`, `Register`, `Tasks` (the protected dashboard).
-- **Task table**: search, status/priority filters, pagination, and inline row editing — clicking **Edit** turns the row's fields into inputs and swaps the **Edit / Remove** buttons for **Save / Cancel**.
-- **Create task modal**: opens from the "+ New task" button, validates title and due date client-side.
-- **API layer**: `src/api/*Service.js` files are thin wrappers around axios — swap the URLs/payloads to match your actual Express routes.
+- **React 18** + **TypeScript**
+- **Vite** (dev server + build)
+- **React Router v6** (routing, protected routes)
+- **Tailwind CSS** (styling)
+- **Vitest** + **Testing Library** (tests)
+
+## Prerequisites
+
+- Node.js 18+
+- The API running (see `../server/README.md`) — either locally on port 4000 or at a URL you point `VITE_server` at
 
 ## Setup
 
 ```bash
+cd client
 npm install
-cp .env.example .env   # point VITE_API_BASE_URL at your backend, or leave it to use the dev proxy
-npm run dev
+cp .env.example .env   # optional in local dev — see below
+npm run dev             # starts Vite on http://localhost:3000
 ```
 
-The Vite dev server proxies `/api/*` to `http://localhost:4000` by default (see `vite.config.js`), so if your Express server runs on port 4000 you don't need to set `VITE_API_BASE_URL` at all in development.
+Other scripts:
 
-## Backend contract this frontend expects
+| Script | Purpose |
+|---|---|
+| `npm run dev` | Start the Vite dev server |
+| `npm run build` | Type-check (`tsc -b`) and build for production |
+| `npm run preview` | Preview the production build locally |
+| `npm test` | Run the Vitest suite once |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run lint` | Lint `src/` |
 
-Adjust `src/api/authService.js` and `src/api/taskService.js` if your actual routes differ.
+## Environment variables
 
-**Auth**
-- `POST /api/auth/register` `{ name, email, password }` → `{ user, token }`
-- `POST /api/auth/login` `{ email, password }` → `{ user, token }`
-- `POST /api/auth/logout` (optional, best-effort)
+`.env.example`:
 
-**Tasks** (all require `Authorization: Bearer <token>`)
-- `GET /api/tasks?search=&status=&priority=&page=&limit=` → `{ items, total, page, totalPages }`
-- `POST /api/tasks` `{ title, description, status, priority, dueDate }` → task
-- `PATCH /api/tasks/:id` `{ ...fields }` → task
-- `DELETE /api/tasks/:id` → `{ success: true }`
-
-**Task shape**
-```json
-{
-  "_id": "…",
-  "title": "Write proposal",
-  "description": "Draft the Q3 proposal",
-  "status": "To Do | In Progress | Done",
-  "priority": "Low | Medium | High",
-  "dueDate": "2026-08-01T00:00:00.000Z"
-}
+```env
+# Base URL for the Express API. Leave unset to use the Vite dev proxy at /api.
+VITE_server=http://localhost:4000
 ```
 
-## Where to plug in server actions / real endpoints
+In development, `vite.config.ts` proxies any request to `/api/*` through to `http://localhost:4000`, so you generally don't need to set `VITE_server` at all — just make sure the server is running on port 4000. Set it explicitly if you're pointing the client at a deployed API.
 
-Everything network-related is isolated to `src/api/`:
-- `axiosClient.js` — base client, JWT header injection, 401 handling.
-- `authService.js` — register/login/logout calls.
-- `taskService.js` — task CRUD + list with search/filter/pagination.
+## Project structure
 
-Nothing in the pages/components talks to axios directly, so once your Express endpoints exist, this is the only place you should need to touch.
+```
+src/
+├── main.tsx              # app entry point
+├── App.tsx                # route table
+├── api/
+│   ├── http.ts             # fetch wrapper: adds the JWT header, parses errors, handles 401 → logout
+│   ├── authService.ts       # signup/login/logout calls
+│   └── taskService.ts       # task CRUD + search/filter/pagination, maps API shape → UI Task type
+├── context/
+│   └── AuthContext.tsx      # session state (user, token), backed by sessionStorage
+├── routes/
+│   └── ProtectedRoute.tsx   # redirects to /login if there's no session
+├── pages/
+│   ├── Login.tsx
+│   ├── Register.tsx
+│   └── Tasks.tsx             # the main authenticated screen — owns filters, pagination, view state
+├── components/
+│   ├── FilterBar.tsx          # search box, status/priority selects, table/board toggle, "+ New task"
+│   ├── CreateTaskModal.tsx     # create-task form with client-side validation
+│   ├── TaskTable.tsx / TaskRow.tsx   # table view with inline edit-in-place
+│   ├── KanbanBoard.tsx / TaskCard.tsx # board view with native HTML5 drag-and-drop between columns
+│   ├── Pagination.tsx           # prev/next pager
+│   ├── StatusBadge.tsx / PriorityBadge.tsx  # small label components
+│   └── Navbar.tsx
+├── types/index.ts           # shared TS types (Task, User, filters, status/priority label maps)
+└── utils/
+    ├── constants.ts          # status/priority values, storage keys, page size
+    └── date.ts                # date <-> unix ms conversion helpers
+```
 
-## Suggested next steps for the full assignment
+## Key behaviors
 
-- Build the Express + MongoDB backend implementing the contract above (bcrypt password hashing, JWT issuing/verification middleware, per-user task scoping, Mongoose validation).
-- Add a `.env.example` on the backend for `PORT`, `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`.
-- Wire up empty/loading/error states further drag-and-drop status changes.
+- **Auth & session** — `AuthContext` keeps the JWT and user in `sessionStorage` (cleared when the tab closes). Every API call attaches `Authorization: Bearer <token>` via `api/http.ts`; a `401` response clears the session automatically and the UI falls back to the login screen through `ProtectedRoute`.
+- **Two views of the same data** — a sortable/editable **table** view and a **Kanban board** view, toggled from the filter bar. Both are driven by the same `tasks` state in `Tasks.tsx`.
+- **Search, filter, pagination** — search (by title), status filter, and priority filter are mutually exclusive query modes handled server-side; changing any of them resets to page 1. Search input is debounced (350ms) so it doesn't fire a request per keystroke. Page number lives in the URL (`?page=`) so it survives refreshes and back/forward navigation.
+- **Drag and drop** — the board view uses the native HTML5 Drag and Drop API (no external library). Dropping a card on a different column optimistically calls the update endpoint with just `{ id, status }`; a failed move surfaces an inline error without losing the rest of the board state.
+- **Inline editing** — in the table view, clicking "Edit" on a row turns its cells into inputs and swaps the action buttons for Save/Cancel, rather than opening a separate modal.
+- **Validation & feedback** — the create-task form validates title and due date client-side before submitting; loading, empty, and error states are handled explicitly in the table and board views rather than left blank.
+
+## Testing
+
+```bash
+npm test
+```
+
+Tests live under `tests/` and cover the API layer (`authService`, `taskService`), `AuthContext`, date utilities, and several components (`Pagination`, `StatusBadge`, `PriorityBadge`, `TaskRow`).
