@@ -43,7 +43,7 @@ Other scripts:
 
 ```env
 # Server
-PORT=4000
+PORT=
 SERVER_URL=
 CLIENT_ORIGIN=
 
