@@ -1,6 +1,6 @@
 # Task Management API (Server)
 
-Express + TypeScript backend for the task management assessment. Handles user authentication and per-user CRUD, search, filtering, and pagination for tasks, backed by MongoDB.
+Express + TypeScript backend for the task management project. Handles user authentication and per-user CRUD, search, filtering, and pagination for tasks, backed by MongoDB.
 
 ## Tech stack
 

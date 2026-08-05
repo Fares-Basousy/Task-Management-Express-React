@@ -1,6 +1,6 @@
 # Task Management Client
 
-React + TypeScript single-page app for the task management assessment. Built with Vite and Tailwind CSS, talking to the Express API in `../server`.
+React + TypeScript single-page app for the task management project. Built with Vite and Tailwind CSS, talking to the Express API in `../server`.
 
 ## Tech stack
 

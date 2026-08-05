@@ -1,6 +1,6 @@
 # Task Management App
 
-A full-stack task manager built for the MERN Stack Developer technical assessment. Users can register, log in, and manage their own tasks — with search, filtering, pagination, and a drag-and-drop Kanban board — through a TypeScript/Express/MongoDB API and a TypeScript/React client.
+A full-stack MERN task manager. Users can register, log in, and manage their own tasks — with search, filtering, pagination, and a drag-and-drop Kanban board — through a TypeScript/Express/MongoDB API and a TypeScript/React client.
 
 This README covers the project as a whole. For implementation details specific to each half of the stack, see:
 
@@ -99,30 +99,25 @@ npm test        # runs server tests then client tests
 
 Or per package: `npm test --prefix server` / `npm test --prefix client`.
 
-## Completed features
+## Features
 
-### Core requirements
+- User registration and login
+- JWT-based authentication and protected API endpoints
+- Each user can only access their own tasks (all task queries are scoped by `userId`)
+- Create, update, and delete tasks
+- Tasks include title, description, status, priority, and due date
+- Statuses: To Do, In Progress, Done
+- Priorities: Low, Medium, High
+- Search tasks by title
+- Filter tasks by status and priority
+- Responsive interface (desktop and mobile)
+- Loading, error, empty-state, and validation feedback throughout
+- **TypeScript** across both client and server
+- **Drag and drop between task statuses** — native HTML5 drag-and-drop on the Kanban board view, with an optimistic status update and inline error handling if the move fails
+- **Frontend and API tests** — Vitest/Testing Library specs on the client (components, API layer, auth context) and Vitest specs on the server (controllers, services, middleware, validators)
+- **Pagination** — server-side, 10 tasks per page, applied consistently across the default list, search, and filter endpoints
 
-- [x] User registration and login
-- [x] JWT-based authentication and protected API endpoints
-- [x] Each user can only access their own tasks (all task queries are scoped by `userId`)
-- [x] Create, update, and delete tasks
-- [x] Tasks include title, description, status, priority, and due date
-- [x] Statuses: To Do, In Progress, Done
-- [x] Priorities: Low, Medium, High
-- [x] Search tasks by title
-- [x] Filter tasks by status and priority
-- [x] Responsive interface (desktop and mobile)
-- [x] Loading, error, empty-state, and validation feedback throughout
-
-### Bonus features implemented
-
-- [x] **TypeScript** — used across both client and server
-- [x] **Drag and drop between task statuses** — native HTML5 drag-and-drop on the Kanban board view, with an optimistic status update and inline error handling if the move fails
-- [x] **Frontend and API tests** — Vitest/Testing Library specs on the client (components, API layer, auth context) and Vitest specs on the server (controllers, services, middleware, validators)
-- [x] **Pagination** — server-side, 10 tasks per page, applied consistently across the default list, search, and filter endpoints
-
-### Bonus features not implemented
+## Roadmap
 
 - [ ] Deployed live version
 - [ ] Docker support
@@ -130,7 +125,11 @@ Or per package: `npm test --prefix server` / `npm test --prefix client`.
 
 ## AI tool usage disclosure
 
-AI tools were used throughout development, per the assessment's stated policy allowing disclosed use of libraries, references, and AI tools:
+AI tools were used throughout development:
 
 - **Claude chat and ChatGPT chat** were used for the main part of the project — planning, scaffolding, and implementation of features.
 - **Claude Code** was used toward the end of development for bug fixing, data normalization, and writing tests.
+
+---
+
+This project originally started as a technical assessment for a MERN Stack Developer role and has since been maintained as a personal side project.
