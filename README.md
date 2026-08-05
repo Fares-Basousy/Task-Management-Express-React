@@ -117,12 +117,6 @@ Or per package: `npm test --prefix server` / `npm test --prefix client`.
 - **Frontend and API tests** — Vitest/Testing Library specs on the client (components, API layer, auth context) and Vitest specs on the server (controllers, services, middleware, validators)
 - **Pagination** — server-side, 10 tasks per page, applied consistently across the default list, search, and filter endpoints
 
-## Roadmap
-
-- [ ] Deployed live version
-- [ ] Docker support
-- [ ] Task attachments
-
 ## AI tool usage disclosure
 
 AI tools were used throughout development:
